@@ -8,7 +8,7 @@ from requests_oauthlib import OAuth1
 
 
 MEDIA_ENDPOINT_URL = 'https://upload.twitter.com/1.1/media/upload.json'
-POST_TWEET_URL = 'https://api.twitter.com/1.1/statuses/update.json'
+POST_TWEET_URL = 'https://api.twitter.com/2/tweets'
 
 CONSUMER_KEY = 'your-consumer-key'
 CONSUMER_SECRET = 'your-consumer-secret'
@@ -149,15 +149,20 @@ class VideoTweet(object):
 
 
   def tweet(self):
-    '''
-    Publishes Tweet with attached video
-    '''
+    # '''
+    # Publishes Tweet with attached video
+    # '''
+    # request_data = {
+    #   "text": "hi",
+    # }
     request_data = {
-      'status': 'I just uploaded a video with the @TwitterAPI.',
-      'media_ids': self.media_id
+      "media": {"media_ids": [str(self.media_id)]},
     }
-
-    req = requests.post(url=POST_TWEET_URL, data=request_data, auth=oauth)
+    headers = {
+      'Content-Type': 'application/json',
+    }
+    req = requests.post(url=POST_TWEET_URL, headers=headers, json=request_data, auth=oauth)
+    print(req.headers)
     print(req.json())
 
 
